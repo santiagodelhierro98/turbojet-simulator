@@ -10,5 +10,3 @@ epsilon_i = 0.075; epsilon_b = 0.06; epsilon_n = 0.02; % Pressure loss coefficie
 eta_cp = 0.88; eta_tp = 0.93; % Politropic efficiencies
 fi = 0.98; % Nozzle velocity coefficient
 x = 0.07; % Turnine cooling bleed
-
-%% Simulation
