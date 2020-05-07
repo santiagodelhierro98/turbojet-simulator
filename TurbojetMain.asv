@@ -75,8 +75,6 @@ h5_bleed = h4 - (h3 - h2)/((1 - alpha)*(1 - x));
 
 h5 = (h5_bleed*(1 + alpha)*(1 - x) +h3*x)/((1 + alpha)*(1 - x) + x);
 TauT = 1 - (theta_0/theta_4)*(TauC - 1);
-theta_5 = TauT*theta_4; % Tt5/T0
-pi_t = TauT^(gamma/(eta_tp*(gamma - 1)));
-delat_5 = pi_t*delta_4; % Pt5/P0
-
-
+theta_5 = TauT*theta_4;
+pi_t = TauT^(gamma/(gamma - 1));
+delat_5 = 
