@@ -78,3 +78,17 @@ TauT = 1 - (theta_0/theta_4)*(TauC - 1);
 theta_5 = TauT*theta_4; % Tt5/T0
 pi_t = TauT^(gamma/(eta_tp*(gamma - 1)));
 delat_5 = pi_t*delta_4; % Pt5/P0
+
+% Afterburner:
+
+
+
+% Nozzle:
+
+theta_9 = theta_5; % Tt9/T0
+delta_9 = (1 - epsilon_i)*(1 - epsilon_b)*(1 - epsilon_n)*theta_0^(gamma/(gamma - 1))*TauC^(gamma*eta_cp/(gamma - 1))*(1 - (theta_0/theta_4)*(TauC - 1))^(gamma/(eta_tp*(gamma - 1))); % Pt9/P0
+v9_ = fi*sqrt(theta_9*(1-delta_9^((1 - gamma)/gamma)));
+epsilon_T = ((gamma - 1)/gamma)*(epsilon_i + epsilon_b + epsilon_n);
+v9 = fi*sqrt(theta_4*(1-(1+epsilon_T)/((theta_0*TauC^eta_cp)*(1 - (theta_4/theta_0)*(TauC - 1))^((1 - eta_tp)/eta_tp))) - theta_0*(TauC - 1));
+V9 = sqrt(2*Cp_air*T0)*sqrt(theta_4 - (TauC*theta_0 - theta_0) - 1);
+
