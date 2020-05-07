@@ -26,6 +26,7 @@ gamma = Cp_air/(Cp_air-R);
 theta_0 = (1+((gamma-1)/2)*M0^2); % Tt0/T0
 delta_0 = theta_0^(gamma/(gamma-1)); % Pt0/P0
 h0 = R*(3.5*T0 - (T0^2)*1.4e-5 + (T0^3)*7.467e-9 + 3090/(A-1));
+V0=M0*sqrt(gamma*R*T0);
 
 % Intake: no work or heat input
 
@@ -60,6 +61,7 @@ Cp4_air = R*(3.5 - (2.8e-5)*Tt4 + (2.24e-8)*Tt4^2 + (A^2)*(exp(A)/(exp(A)-1)^2))
 Cp4_fuel = R*(4.47659 + 8.01994e-3*Tt4 - 1.873e-6*(Tt4^2));
 
 % alpha = (h4_air - h3)/h4_fuel;
+
 %alpha*((h4_fuel)/(tt4 - Tt3)) = (Cp4_air + alpha*Cp4_fuel)/(1 + alpha),
 %aillem d'aquí la alpha:
 alpha = 0.5*((Cp4_fuel-1)+sqrt((1-Cp4_fuel)^2 + 4*Cp4_air*((Tt4 - Tt3)/h4_fuel)));
@@ -79,16 +81,21 @@ theta_5 = TauT*theta_4; % Tt5/T0
 pi_t = TauT^(gamma/(eta_tp*(gamma - 1)));
 delat_5 = pi_t*delta_4; % Pt5/P0
 
-% Afterburner:
-
-
-
 % Nozzle:
 
 theta_9 = theta_5; % Tt9/T0
 delta_9 = (1 - epsilon_i)*(1 - epsilon_b)*(1 - epsilon_n)*theta_0^(gamma/(gamma - 1))*TauC^(gamma*eta_cp/(gamma - 1))*(1 - (theta_0/theta_4)*(TauC - 1))^(gamma/(eta_tp*(gamma - 1))); % Pt9/P0
-v9_ = fi*sqrt(theta_9*(1-delta_9^((1 - gamma)/gamma)));
 epsilon_T = ((gamma - 1)/gamma)*(epsilon_i + epsilon_b + epsilon_n);
 v9 = fi*sqrt(theta_4*(1-(1+epsilon_T)/((theta_0*TauC^eta_cp)*(1 - (theta_4/theta_0)*(TauC - 1))^((1 - eta_tp)/eta_tp))) - theta_0*(TauC - 1));
+v0 = sqrt(theta_0 - 1);
 V9 = sqrt(2*Cp_air*T0)*sqrt(theta_4 - (TauC*theta_0 - theta_0) - 1);
 
+% Performances:
+
+S_T = V9*(1+alpha_) - V0;
+Eta_Overall = (S_T*V0)/(alpha_*h4_fuel);
+C_TS = alpha_/S_T;
+
+fprintf("Specific Thrust = " + S_T + "\n");
+fprintf("Overall Efficiency = " + Eta_Overall + "\n");
+fprintf("Specific Fuel Consumption = " + C_TS + "\n");
