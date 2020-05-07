@@ -78,5 +78,3 @@ TauT = 1 - (theta_0/theta_4)*(TauC - 1);
 theta_5 = TauT*theta_4; % Tt5/T0
 pi_t = TauT^(gamma/(eta_tp*(gamma - 1)));
 delat_5 = pi_t*delta_4; % Pt5/P0
-
-
