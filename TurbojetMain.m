@@ -60,11 +60,8 @@ A = 3090/Tt4;
 Cp4_air = R*(3.5 - (2.8e-5)*Tt4 + (2.24e-8)*Tt4^2 + (A^2)*(exp(A)/(exp(A)-1)^2));
 Cp4_fuel = R*(4.47659 + 8.01994e-3*Tt4 - 1.873e-6*(Tt4^2));
 
-% alpha = (h4_air - h3)/h4_fuel;
-
-%alpha*((h4_fuel)/(tt4 - Tt3)) = (Cp4_air + alpha*Cp4_fuel)/(1 + alpha),
-%aillem d'aquí la alpha:
-alpha = 0.5*((Cp4_fuel-1)+sqrt((1-Cp4_fuel)^2 + 4*Cp4_air*((Tt4 - Tt3)/h4_fuel)));
+alpha = (h4_air - h3)/h4_fuel;
+%alpha = 0.5*((Cp4_fuel-1)+sqrt((1-Cp4_fuel)^2 + 4*Cp4_air*((Tt4 - Tt3)/h4_fuel)));
 alpha_ = alpha*(1-x); %effective richness
 
 h4 = (h4_air+alpha*h4_fuel)/(R+R*alpha);
