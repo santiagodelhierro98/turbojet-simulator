@@ -50,17 +50,17 @@ pi_b = 1-epsilon_b; % Pt4/Pt3
 theta_4 = Tt4/T0;
 delta_4 = pi_b*delta_3; % Pt4/P0
 Pt4 = delta_4*P0;
+
 C = 3090/Tt4;
 h4_air = R*(3.5*Tt4 - (Tt4^2)*1.4e-5 + (Tt4^3)*7.467e-9 + 3090/(C-1));
 d_hfc = R*(-1607.2 + 4.47659*Tt4 + 4.00997e-3*(Tt4^2) - 6.12432e-7*(Tt4^3));
 h4_fuel = hf0 - (d_hfc);
 
-D = 3090/Tt4;
-Cp4_air = R*(3.5 - (2.8e-5)*Tt4 + (2.24e-8)*Tt4^2 + (D^2)*(exp(D)/(exp(D)-1)^2));
+Cp4_air = R*(3.5 - (2.8e-5)*Tt4 + (2.24e-8)*Tt4^2 + (C^2)*(exp(C)/(exp(C)-1)^2));
 Cp4_fuel = R*(4.47659 + 8.01994e-3*Tt4 - 1.873e-6*(Tt4^2));
 
 %alpha = (h4_air - h3)/h4_fuel;
-alpha=Cp4_air*(Tt4-Tt3)/h4_fuel;
+alpha = Cp4_air*(Tt4-Tt3)/h4_fuel;
 %alpha = 0.5*((Cp4_fuel-1)+sqrt((1-Cp4_fuel)^2 + 4*Cp4_air*((Tt4 - Tt3)/h4_fuel)));
 alpha_ = alpha*(1-x); %effective richness
 
