@@ -24,6 +24,8 @@ gamma = Cp_air/(Cp_air-R);
 
 theta_0 = (1+((gamma-1)/2)*M0^2); % Tt0/T0
 delta_0 = theta_0^(gamma/(gamma-1)); % Pt0/P0
+Tt0 = T0*theta_0;
+h0 = R*(3.5*Tt0 - (Tt0^2)*1.4e-5 + (Tt0^3)*7.467e-9 + 3090/(A-1));
 h0 = R*(3.5*T0 - (T0^2)*1.4e-5 + (T0^3)*7.467e-9 + 3090/(A-1));
 V0=M0*sqrt(gamma*R*T0);
 
