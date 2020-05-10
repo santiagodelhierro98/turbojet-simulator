@@ -43,7 +43,7 @@ h4_fuel = hf0 - (d_hfc);
 Cp4_air = R*(3.5 - (2.8e-5)*Tt4 + (2.24e-8)*Tt4^2 + (C^2)*(exp(C)/(exp(C)-1)^2));
 Cp4_fuel = R*(4.47659 + 8.01994e-3*Tt4 - 1.873e-6*(Tt4^2));
 
-%alpha = (h4_air - h3)/h4_fuel;
+% alpha = (h4_air - h3)/h4_fuel;
 alpha = Cp4_air*(Tt4-Tt3)/h4_fuel;
 %alpha = 0.5*((Cp4_fuel-1)+sqrt((1-Cp4_fuel)^2 + 4*Cp4_air*((Tt4 - Tt3)/h4_fuel)));
 alpha_ = alpha*(1-x); %effective richness
@@ -65,7 +65,9 @@ delat_5 = pi_t*delta_4; % Pt5/P0
 % Nozzle:
 
 theta_9 = theta_5; % Tt9/T0
+Tt9 = theta_9*T0;
 delta_9 = (1 - epsilon_i)*(1 - epsilon_b)*(1 - epsilon_n)*theta_0^(gamma/(gamma - 1))*TauC^(gamma*eta_cp/(gamma - 1))*(1 - (theta_0/theta_4)*(TauC - 1))^(gamma/(eta_tp*(gamma - 1))); % Pt9/P0
+Pt9 = delta_9*P0;
 epsilon_T = ((gamma - 1)/gamma)*(epsilon_i + epsilon_b + epsilon_n);
 v9 = real(fi*sqrt(theta_4*(1-(1+epsilon_T)/((theta_0*TauC^eta_cp)*(1 - (theta_4/theta_0)*(TauC - 1))^((1 - eta_tp)/eta_tp))) - theta_0*(TauC - 1)));
 v0 = sqrt(theta_0 - 1);
