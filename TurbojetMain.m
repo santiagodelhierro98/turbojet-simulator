@@ -17,18 +17,28 @@ R = 287.15; % Gas cte in J/kgK
 hf0 = 4.3095e7; % Fuel lower heating value J/kg
 
 %% Simulation
-[Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
+[Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim_2(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
 fprintf("Psi = " + S_T + "m/s\n");
 fprintf("C_t_s = " + 1000*C_TS + "g/kN*s\n");
 fprintf("Eta_o = " + 100*Eta_Overall + "%");
 
 figure()
+subplot(3, 1, 1)
 plot(Tt, '-o')
-hold on
+xlabel('Stage');
+ylabel('Total Temperature [K]');
+grid on
+
+subplot(3, 1, 2)
 plot(Pt, '-o')
-hold on
+xlabel('Stage');
+ylabel('Total Pressure [Pa]');
+grid on
+
+subplot(3, 1, 3)
 plot(Ht, '-o')
-legend('Theta (T)', 'Delta (P)', 'Normalized Enthalpy');
+xlabel('Stage');
+ylabel('Enthalpy [J/kg]');
 grid on
 
 S_Tv = [];

@@ -16,9 +16,9 @@ delta_0 = theta_0^(gamma/(gamma-1)); % Pt0/P0
 h0 = R*(3.5*T0 - (T0^2)*1.4e-5 + (T0^3)*7.467e-9 + 3090/(A-1));
 V0=M0*sqrt(gamma*R*T0);
 
-Tt = [Tt; theta_0];
-Pt = [Pt; delta_0];
-Ht = [Ht; h0/h0];
+Tt = [Tt; theta_0*T0];
+Pt = [Pt; delta_0*P0];
+Ht = [Ht; h0];
 % Intake: no work or heat input
 
 theta_2 = theta_0; % Tt2/T0
@@ -26,22 +26,27 @@ delta_2 = (1-epsilon_i)*delta_0; % Pt2/P0
 Pt2 = delta_2*P0;
 h2 = h0;
 
-Tt = [Tt; theta_2];
-Pt = [Pt; delta_2];
-Ht = [Ht; h2/h0];
+
+Tt = [Tt; theta_2*T0];
+Pt = [Pt; Pt2];
+Ht = [Ht; h2];
 % Compressor:
 
-theta_3 = TauC*theta_0; % Tt3/T0
-pi_c = TauC^(eta_cp*(gamma/(gamma-1))); % Pt3/Pt2
+theta_3 = TauC*theta_0; % Tt3/T0ç
+Tt3 = theta_3*T0;
+
+Cp_air3 = R*(3.5 - (2.8e-5)*Tt3 + (2.24e-8)*Tt3^2 + (A^2)*(exp(A)/(exp(A)-1)^2));
+gamma3 = Cp_air3/(Cp_air3-R);
+pi_c = TauC^(eta_cp*(gamma3/(gamma3-1))); % Pt3/Pt2
 delta_3 = pi_c*delta_2; % Pt3/P0
 Pt3 = delta_3*P0;
-Tt3 = theta_3*T0;
+
 B = 3090/Tt3;
 h3 = R*(3.5*Tt3 - (Tt3^2)*1.4e-5 + (Tt3^3)*7.467e-9 + 3090/(B-1));
 
-Tt = [Tt; theta_3];
-Pt = [Pt; delta_3];
-Ht = [Ht; h3/h0];
+Tt = [Tt; Tt3];
+Pt = [Pt; Pt3];
+Ht = [Ht; h3];
 % Burner:
 
 theta_4 = Tt4/T0;
@@ -64,9 +69,9 @@ alpha_ = alpha*(1-x); %effective richness
 
 h4 = (h4_air+alpha*h4_fuel)/(R+R*alpha);
 
-Tt = [Tt; theta_4];
-Pt = [Pt; delta_4];
-Ht = [Ht; h4/h0];
+Tt = [Tt; Tt4];
+Pt = [Pt; Pt4];
+Ht = [Ht; h4];
 % Bleeding
 
 h5_bleed = h4 - (h3 - h2)/((1 - alpha)*(1 - x));
@@ -79,9 +84,9 @@ theta_5 = TauT*theta_4; % Tt5/T0
 pi_t = TauT^(gamma/(eta_tp*(gamma - 1)));
 delta_5 = pi_t*delta_4; % Pt5/P0
 
-Tt = [Tt; theta_5];
-Pt = [Pt; delta_5];
-Ht = [Ht; h5/h0];
+Tt = [Tt; theta_5*T0];
+Pt = [Pt; delta_5*P0];
+Ht = [Ht; h5];
 % Nozzle:
 
 theta_9 = theta_5; % Tt9/T0
@@ -95,9 +100,9 @@ v9 = real(fi*sqrt(theta_4*(1-(1+epsilon_T)/((theta_0*TauC^eta_cp)*(1 - (theta_4/
 %V9 = sqrt(2*Cp_air*T0)*sqrt(theta_4 - (TauC*theta_0 - theta_0) - 1);
 V9 = sqrt(2*Cp_air*T0)*v9;
 
-Tt = [Tt; theta_9];
-Pt = [Pt; delta_9];
-Ht = [Ht; h9/h0];
+Tt = [Tt; Tt9];
+Pt = [Pt; Pt9];
+Ht = [Ht; h9];
 % Performances:
 
 S_T = V9*(1+alpha_) - V0; % Specific thrust
