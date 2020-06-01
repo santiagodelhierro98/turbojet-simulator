@@ -12,8 +12,8 @@ gamma = Cp_air/(Cp_air-R);
 theta0 = (1+((gamma-1)/2)*M0^2);
 Tt0 = T0*theta0;
 A = exp(3090/Tt0);
-phi_0 = 3.5*log(Tt0) - 2.8e-5*Tt0 + 1.12e-8*(Tt0^2) + 3090/(Tt0*(A - 1)) - log((A - 1)/A);
-Pr0 = exp(phi_0);
+phi_t0 = 3.5*log(Tt0) - 2.8e-5*Tt0 + 1.12e-8*(Tt0^2) + 3090/(Tt0*(A - 1)) - log((A - 1)/A);
+Pr0 = exp(phi_t0);
 Pt0 = P0*theta0^(gamma/(gamma - 1));
 ht0 = R*(3.5*T0 - (T0^2)*1.4e-5 + (T0^3)*7.467e-9 + 3090/(A-1));
 
@@ -21,10 +21,10 @@ Tt = [Tt; Tt0];
 Pt = [Pt; Pt0];
 ht = [ht; ht0];
 
-% INTAKE
+%% INTAKE
 Tt2 = Tt0;
 A = exp(3090/Tt2);
-phi_2 = 3.5*log(Tt2) - 2.8e-5*Tt2 + 1.12e-8*(Tt2^2) + 3090/(Tt2*(A - 1)) - log((A - 1)/A);
+phi_t2 = 3.5*log(Tt2) - 2.8e-5*Tt2 + 1.12e-8*(Tt2^2) + 3090/(Tt2*(A - 1)) - log((A - 1)/A);
 Pr2 = Pr0;
 Pt2 = Pt0*(1-epsilon_i);
 ht2 = ht0;
@@ -33,11 +33,11 @@ Tt = [Tt; Tt2];
 Pt = [Pt; Pt2];
 ht = [ht; ht2];
 
-% COMPRESSOR
+%% COMPRESSOR
 Tt3 = TauC*Tt2;
 A = exp(3090/Tt3);
-phi_3 = 3.5*log(Tt3) - 2.8e-5*Tt3 + 1.12e-8*(Tt3^2) + 3090/(Tt3*(A - 1)) - log((A - 1)/A);
-Pr3 = Pr2*exp(phi_3 - phi_2);
+phi_t3 = 3.5*log(Tt3) - 2.8e-5*Tt3 + 1.12e-8*(Tt3^2) + 3090/(Tt3*(A - 1)) - log((A - 1)/A);
+Pr3 = Pr2*exp(phi_t3 - phi_t2);
 Pt3 = Pt2*(Pr3/Pr2)^eta_cp;
 ht3 = R*(3.5*Tt3 - (Tt3^2)*1.4e-5 + (Tt3^3)*7.467e-9 + 3090/(A-1));
 
@@ -45,31 +45,67 @@ Tt = [Tt; Tt3];
 Pt = [Pt; Pt3];
 ht = [ht; ht3];
 
-% BURNER
+%% BURNER
 Pt4 = Pt3*(1 - epsilon_b);
 A = exp(3090/Tt4);
 h4_air = R*(3.5*Tt4 - (Tt4^2)*1.4e-5 + (Tt4^3)*7.467e-9 + 3090/(A-1));
 h4_fuel = R*(-149.054 + 4.47659*Tt4 - 4.00997e-3*(Tt4^2) - 6.12432e-7*(Tt4^3));
-phi_4_air = 3.5*log(Tt4) - 2.8e-5*Tt4 + 1.12e-8*(Tt4^2) + 3090/(Tt4*(A - 1)) - log((A - 1)/A);
-phi_4_fuel = 4.47659*log(Tt4) + 8.01994e-3*Tt4 + 9.19648e-7*(Tt4^2);
+phi_t4_air = 3.5*log(Tt4) - 2.8e-5*Tt4 + 1.12e-8*(Tt4^2) + 3090/(Tt4*(A - 1)) - log((A - 1)/A);
+phi_t4_fuel = 4.47659*log(Tt4) + 8.01994e-3*Tt4 + 9.19648e-7*(Tt4^2);
 
 h_fuel_T4 = hf0 - (-1607.2 + 4.47659*Tt4 + 4.00997e-3*(Tt4^2) - 6.12432e-7*(Tt4^3));
 alpha = (h4_air - ht3)/h_fuel_T4;
 alpha_ = alpha*(1 - x);
 
-phi_4 = (phi_4_air + alpha*phi_4_fuel)/(1 + alpha); 
-Pr4 = Pr3*exp(phi_4 - phi_3);
+phi_t4 = (phi_t4_air + alpha*phi_t4_fuel)/(1 + alpha); 
+Pr4 = Pr3*exp(phi_t4 - phi_t3);
 ht4 = (h4_air + alpha*h4_fuel)/(1 + alpha);
 
 Tt = [Tt; Tt4];
 Pt = [Pt; Pt4];
 ht = [ht; ht4];
 
-% TURBINE
+%% TURBINE
 ht5 = ht4 - (ht3 - ht2)/((1 + alpha)*(1 - x));
 ht5_mix = (ht5*(1 + alpha)*(1 - x) + ht3*x)/((1 + alpha)*(1 - x) + x);
 
-fun = R*(3.5*x - 1.4e-5*(x^2) + 7.467e-9*(x^3) + 3090/(exp(3090/x) - 1));
-Tt5 = fsolve(fun, 983.28768, ht5);
+x0 = 983.28768;
+Tt5 = fsolve(@ht5, x0);
+
+A = exp(3090/Tt5);
+phi_t5 = 3.5*log(Tt5) - 2.8e-5*Tt5 + 1.12e-8*(Tt5^2) + 3090/(Tt5*(A - 1)) - log((A - 1)/A);
+Pr5 = Pr4*exp(phi_t5 - phi_t4);
+Pt5 = Pt4*(Pr5/Pr4)^eta_tp;
+
+Tt = [Tt; Tt5];
+Pt = [Pt; Pt5];
+ht = [ht; ht5];
+
+%% NOZZLE
+Pt9 = Pt5*(1 - epsilon_n);
+Tt9 = Tt5;
+ht9 = ht5;
+
+Tt = [Tt; Tt9];
+Pt = [Pt; Pt9];
+ht = [ht; ht9];
+
+A = 3090/Tt9;
+Cp_air_9 = R*(3.5 - (2.8e-5)*Tt9 + (2.24e-8)*Tt9^2 + (A^2)*(exp(A)/(exp(A)-1)^2));
+gamma_9 = Cp_air_9/(Cp_air_9 - R);
+
+A = exp(3090/Tt9);
+phi_t9 = 3.5*log(Tt9) - 2.8e-5*Tt9 + 1.12e-8*(Tt9^2) + 3090/(Tt9*(A - 1)) - log((A - 1)/A);
+pi_9 = Pt9/P0;
+phi_9 = phi_t9 - pi_9;
+
+x0 = T0;
+T9_is = fsolve(@T9, x0);
+A = exp(3090/T9_is);
+h9_is = R*(3.5*T9_is - (T9_is^2)*1.4e-5 + (T9_is^3)*7.467e-9 + 3090/(A-1));
+
+V9_is = sqrt(2*(ht9 - h9_is));
+V9 = V9_is*fi;
+
 
 end
