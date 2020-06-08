@@ -13,7 +13,7 @@ theta0 = (1+((gamma-1)/2)*M0^2);
 Tt0 = T0*theta0;
 A = exp(3090/Tt0);
 phi_t0 = 3.5*log(Tt0) - 2.8e-5*Tt0 + 1.12e-8*(Tt0^2) + 3090/(Tt0*(A - 1)) - log((A - 1)/A);
-Pr0 = exp(phi_t0);
+Pr0 = log(phi_t0);
 Pt0 = P0*theta0^(gamma/(gamma - 1));
 ht0 = R*(3.5*T0 - (T0^2)*1.4e-5 + (T0^3)*7.467e-9 + 3090/(A-1));
 
@@ -37,7 +37,7 @@ ht = [ht; ht2];
 Tt3 = TauC*Tt2;
 A = exp(3090/Tt3);
 phi_t3 = 3.5*log(Tt3) - 2.8e-5*Tt3 + 1.12e-8*(Tt3^2) + 3090/(Tt3*(A - 1)) - log((A - 1)/A);
-Pr3 = Pr2*exp(phi_t3 - phi_t2);
+Pr3 = Pr2/log(phi_t3/phi_t2);
 Pt3 = Pt2*(Pr3/Pr2)^eta_cp;
 ht3 = R*(3.5*Tt3 - (Tt3^2)*1.4e-5 + (Tt3^3)*7.467e-9 + 3090/(A - 1));
 
@@ -58,7 +58,7 @@ alpha = (h4_air - ht3)/h_fuel_T4;
 alpha_ = alpha*(1 - x);
 
 phi_t4 = (phi_t4_air + alpha*phi_t4_fuel)/(1 + alpha); 
-Pr4 = Pr3*exp(phi_t4 - phi_t3);
+Pr4 = Pr3/log(phi_t4/phi_t3);
 ht4 = (h4_air + alpha*h4_fuel)/(1 + alpha);
 
 Tt = [Tt; Tt4];
@@ -74,7 +74,7 @@ Tt5 = fsolve(@ht5, x0);
 
 A = exp(3090/Tt5);
 phi_t5 = 3.5*log(Tt5) - 2.8e-5*Tt5 + 1.12e-8*(Tt5^2) + 3090/(Tt5*(A - 1)) - log((A - 1)/A);
-Pr5 = Pr4*exp(phi_t5 - phi_t4);
+Pr5 = Pr4/log(phi_t5/phi_t4);
 Pt5 = Pt4*(Pr5/Pr4)^(1/eta_tp);
 
 Tt = [Tt; Tt5];
