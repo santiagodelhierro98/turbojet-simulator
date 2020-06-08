@@ -75,16 +75,16 @@ Tt5 = fsolve(@ht5, x0);
 A = exp(3090/Tt5);
 phi_t5 = 3.5*log(Tt5) - 2.8e-5*Tt5 + 1.12e-8*(Tt5^2) + 3090/(Tt5*(A - 1)) - log((A - 1)/A);
 Pr5 = Pr4*exp(phi_t5 - phi_t4);
-Pt5 = Pt4*(Pr5/Pr4)^eta_tp;
+Pt5 = Pt4*(Pr5/Pr4)^(1/eta_tp);
 
 Tt = [Tt; Tt5];
 Pt = [Pt; Pt5];
-ht = [ht; ht5];
+ht = [ht; ht5_mix];
 
 %% NOZZLE
 Pt9 = Pt5*(1 - epsilon_n);
 Tt9 = Tt5;
-ht9 = ht5;
+ht9 = ht5_mix;
 
 Tt = [Tt; Tt9];
 Pt = [Pt; Pt9];
