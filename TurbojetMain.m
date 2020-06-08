@@ -51,7 +51,7 @@ Tt4 = 1000;
 while (Tt4 <= 1800)
     M0 = 0;
     i = 1;
-    while (M0 <= 2.46)
+    while (M0 <= 2.2)
         [Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim_2(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
         S_Tv(n, i) = S_T;
         if (Eta_Overall < 0)
