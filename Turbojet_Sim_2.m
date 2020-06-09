@@ -13,9 +13,10 @@ theta0 = (1+((gamma-1)/2)*M0^2);
 Tt0 = T0*theta0;
 A = exp(3090/Tt0);
 phi_t0 = 3.5*log(Tt0) - 2.8e-5*Tt0 + 1.12e-8*(Tt0^2) + 3090/(Tt0*(A - 1)) - log((A - 1)/A);
-%Pr0 = log(phi_t0);
-Pt0 = P0*theta0^(gamma/(gamma - 1));
-ht0 = R*(3.5*T0 - (T0^2)*1.4e-5 + (T0^3)*7.467e-9 + 3090/(A-1));
+A = exp(3090/T0);
+phi_0 = 3.5*log(T0) - 2.8e-5*T0 + 1.12e-8*(T0^2) + 3090/(T0*(A - 1)) - log((A - 1)/A);
+Pt0 = P0*exp(phi_t0 - phi_0);
+ht0 = R*(3.5*Tt0 - (Tt0^2)*1.4e-5 + (Tt0^3)*7.467e-9 + 3090/(A-1));
 
 Tt = [Tt; Tt0];
 Pt = [Pt; Pt0];
@@ -23,9 +24,7 @@ ht = [ht; ht0];
 
 %% INTAKE
 Tt2 = Tt0;
-A = exp(3090/Tt2);
 phi_t2 = phi_t0;
-%Pr2 = Pr0;
 Pt2 = Pt0*(1-epsilon_i);
 ht2 = ht0;
 
@@ -37,7 +36,6 @@ ht = [ht; ht2];
 Tt3 = TauC*Tt2;
 A = exp(3090/Tt3);
 phi_t3 = 3.5*log(Tt3) - 2.8e-5*Tt3 + 1.12e-8*(Tt3^2) + 3090/(Tt3*(A - 1)) - log((A - 1)/A);
-%Pr3 = Pr2/log(phi_t2/phi_t3);
 Pt3 = Pt2*exp((phi_t3 - phi_t2)*eta_cp);
 ht3 = R*(3.5*Tt3 - (Tt3^2)*1.4e-5 + (Tt3^3)*7.467e-9 + 3090/(A - 1));
 
@@ -49,7 +47,7 @@ ht = [ht; ht3];
 Pt4 = Pt3*(1 - epsilon_b);
 A = exp(3090/Tt4);
 h4_air = R*(3.5*Tt4 - (Tt4^2)*1.4e-5 + (Tt4^3)*7.467e-9 + 3090/(A-1));
-h4_fuel = R*(-149.054 + 4.47659*Tt4 - 4.00997e-3*(Tt4^2) - 6.12432e-7*(Tt4^3));
+h4_fuel = R*(-149.054 + 4.47659*Tt4 + 4.00997e-3*(Tt4^2) - 6.12432e-7*(Tt4^3));
 phi_t4_air = 3.5*log(Tt4) - 2.8e-5*Tt4 + 1.12e-8*(Tt4^2) + 3090/(Tt4*(A - 1)) - log((A - 1)/A);
 phi_t4_fuel = 4.47659*log(Tt4) + 8.01994e-3*Tt4 + 9.19648e-7*(Tt4^2);
 
@@ -58,7 +56,6 @@ alpha = (h4_air - ht3)/h_fuel_T4;
 alpha_ = alpha*(1 - x);
 
 phi_t4 = (phi_t4_air + alpha*phi_t4_fuel)/(1 + alpha); 
-%Pr4 = Pr3/log(phi_t3/phi_t4);
 ht4 = (h4_air + alpha*h4_fuel)/(1 + alpha);
 
 Tt = [Tt; Tt4];
@@ -74,12 +71,12 @@ Tt5 = fsolve(@ht5, x0);
 
 A = exp(3090/Tt5);
 phi_t5 = 3.5*log(Tt5) - 2.8e-5*Tt5 + 1.12e-8*(Tt5^2) + 3090/(Tt5*(A - 1)) - log((A - 1)/A);
-%Pr5 = Pr4/log(phi_t4/phi_t5);
 Pt5 = Pt4*exp((phi_t5 - phi_t4)*(1/eta_tp));
 
 Tt = [Tt; Tt5];
 Pt = [Pt; Pt5];
 ht = [ht; ht5_mix];
+
 
 %% NOZZLE
 Pt9 = Pt5*(1 - epsilon_n);
@@ -90,16 +87,11 @@ Tt = [Tt; Tt9];
 Pt = [Pt; Pt9];
 ht = [ht; ht9];
 
-A = 3090/Tt9;
-Cp_air_9 = R*(3.5 - (2.8e-5)*Tt9 + (2.24e-8)*Tt9^2 + (A^2)*(exp(A)/(exp(A)-1)^2));
-gamma_9 = Cp_air_9/(Cp_air_9 - R);
-
-A = exp(3090/Tt9);
 phi_t9 = phi_t5;
 pi_9 = Pt9/P0;
 phi_9 = phi_t9 - pi_9;
 
-x0 = T0;
+x0 = Tt9;
 T9_is = fsolve(@T9, x0);
 A = exp(3090/T9_is);
 h9_is = R*(3.5*T9_is - (T9_is^2)*1.4e-5 + (T9_is^3)*7.467e-9 + 3090/(A-1));
@@ -111,7 +103,7 @@ V0 = M0*sqrt(gamma*R*T0);
 v0 = V0/sqrt(2+Cp_air*T0);
 
 S_T = (1 + alpha_)*V9 - V0;
-Eta_Overall = S_T*V0/(alpha_*hf0);
+Eta_Overall = S_T*V0/(alpha_*h_fuel_T4);
 C_TS = (alpha_/S_T)*1e5; %% g/kN*s
 Eta_Propulsive = 2*v0/(v9+v0);
 Eta_Thermal = (V9^2 - V0^2)/(2*alpha_*hf0);
