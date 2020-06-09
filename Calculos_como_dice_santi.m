@@ -6,7 +6,7 @@ clc
 M0 = 2;
 T0 = 216.5;
 P0 = 22632;
-Tt4 = 1374;
+Tt4 = 1373;
 TET = Tt4;
 tau_c = 2;
 epsilon_i = 0.075;
@@ -119,6 +119,7 @@ C22 = 138.54;
 Prt5 = (((B2-B)/(B2-B1))*C11 + ((B-B1)/(B2-B1))*C12)*((A2-A)/(A2-A1)) + (((B2-B)/(B2-B1))*C21 + ((B-B1)/(B2-B1))*C22)*((A-A1)/(A2-A1));
 
 Pt5 = Pt4*(Prt5/Prt4)^(1/nu_tp);
+% Pt5 = Pt4*exp((Prt5/Prt4)*(1/nu_tp));
 
 %% 9: Nozzle
 
@@ -142,8 +143,9 @@ C22 = 138.54;
 
 Prt9 = (((B2-B)/(B2-B1))*C11 + ((B-B1)/(B2-B1))*C12)*((A2-A)/(A2-A1)) + (((B2-B)/(B2-B1))*C21 + ((B-B1)/(B2-B1))*C22)*((A-A1)/(A2-A1));
 
-delta0 = Pt9/P0;
-pi9 = delta0;
+delta9 = Pt9/P0;
+% suposant tobera adaptada
+pi9 = delta9;
 Pr9_is = exp(log(Prt9) - log(pi9));
 
 % Pr9 -> Taules:
