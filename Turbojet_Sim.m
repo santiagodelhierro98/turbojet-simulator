@@ -8,9 +8,10 @@ Pt = [];
 Ht = [];
 
 A = 3090/T0;
-Cp_air = R*(3.5 - (2.8e-5)*T0 + (2.24e-8)*T0^2 + (A^2)*(exp(A)/(exp(A)-1)^2));
-gamma = Cp_air/(Cp_air-R);
-
+% Cp_air = R*(3.5 - (2.8e-5)*T0 + (2.24e-8)*T0^2 + (A^2)*(exp(A)/(exp(A)-1)^2));
+% gamma = Cp_air/(Cp_air-R);
+gamma = 1.4;
+Cp_air = gamma*R/(gamma - 1);
 theta_0 = (1+((gamma-1)/2)*M0^2); % Tt0/T0
 delta_0 = theta_0^(gamma/(gamma-1)); % Pt0/P0
 h0 = R*(3.5*T0 - (T0^2)*1.4e-5 + (T0^3)*7.467e-9 + 3090/(A-1));
@@ -36,9 +37,9 @@ Ht = [Ht; h2];
 theta_3 = TauC*theta_0; % Tt3/T0ç
 Tt3 = theta_3*T0;
 
-Cp_air3 = R*(3.5 - (2.8e-5)*Tt3 + (2.24e-8)*Tt3^2 + (A^2)*(exp(A)/(exp(A)-1)^2));
-gamma3 = Cp_air3/(Cp_air3-R);
-pi_c = TauC^(eta_cp*(gamma3/(gamma3-1))); % Pt3/Pt2
+%Cp_air3 = R*(3.5 - (2.8e-5)*Tt3 + (2.24e-8)*Tt3^2 + (A^2)*(exp(A)/(exp(A)-1)^2));
+%gamma3 = Cp_air3/(Cp_air3-R);
+pi_c = TauC^(eta_cp*(gamma/(gamma-1))); % Pt3/Pt2
 delta_3 = pi_c*delta_2; % Pt3/P0
 Pt3 = delta_3*P0;
 
@@ -60,10 +61,10 @@ h4_air = R*(3.5*Tt4 - (Tt4^2)*1.4e-5 + (Tt4^3)*7.467e-9 + 3090/(C-1));
 d_hfc = R*(-1607.2 + 4.47659*Tt4 + 4.00997e-3*(Tt4^2) - 6.12432e-7*(Tt4^3));
 h4_fuel = hf0 - (d_hfc);
 
-Cp4_air = R*(3.5 - (2.8e-5)*Tt4 + (2.24e-8)*Tt4^2 + (C^2)*(exp(C)/(exp(C)-1)^2));
-Cp4_fuel = R*(4.47659 + 8.01994e-3*Tt4 - 1.873e-6*(Tt4^2));
+%Cp_air = R*(3.5 - (2.8e-5)*Tt4 + (2.24e-8)*Tt4^2 + (C^2)*(exp(C)/(exp(C)-1)^2));
+%Cp_fuel = R*(4.47659 + 8.01994e-3*Tt4 - 1.873e-6*(Tt4^2));
 
-alpha = Cp4_air*(Tt4-Tt3)/h4_fuel;
+alpha = Cp_air*(Tt4-Tt3)/h4_fuel;
 alpha_ = alpha*(1-x); %effective richness
 
 h4 = (h4_air+alpha*h4_fuel)/(1+alpha);
