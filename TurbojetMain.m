@@ -1,6 +1,8 @@
 %% Turbojet Simulator
 clear all;
 close all;
+clc;
+clear;
 
 %% Inputs
 M0 = 2; % Mach 0
