@@ -143,10 +143,10 @@ C22 = 138.54;
 Prt9 = (((B2-B)/(B2-B1))*C11 + ((B-B1)/(B2-B1))*C12)*((A2-A)/(A2-A1)) + (((B2-B)/(B2-B1))*C21 + ((B-B1)/(B2-B1))*C22)*((A-A1)/(A2-A1));
 delta9 = Pt9/P0;
 
-% suposant tobera adaptada
+% suposant tobera adaptada i isentropica
 pi9 = delta9;
 P9 = Pt9/pi9;
-Pr9i = Prt9*P9/Pt9;
+Pr9i = (Prt9*P9)/Pt9;
 
 % Sabiendo Pr9i y alfa calculamos en tablas a que T9i estamos
 T1 = Interpolar(8.08,8.70,Pr9i,490,500); %interpolamos para sacar la Temp total de Prt9i para alfa = 0.0169
@@ -169,13 +169,13 @@ C21 = 504.63;
 C22 = 515.35;
 
 h9i = (((B2-B)/(B2-B1))*C11 + ((B-B1)/(B2-B1))*C12)*((A2-A)/(A2-A1)) + (((B2-B)/(B2-B1))*C21 + ((B-B1)/(B2-B1))*C22)*((A-A1)/(A2-A1));
-V9 = fi_IsentropicVelocity * sqrt((ht9-h9i)*1000);
+V9 = fi_IsentropicVelocity * sqrt(2*(ht9-h9i)*1000);
 
 %% Performances:
 
 alfa_ = alfa*(1-x);
 SpecificThrust = (1+alfa_)*V9-V0;
-OverallEfficiency = (SpecificThrust*V0)/(alfa_*4.3095e7);
+OverallEfficiency = (SpecificThrust*V0)/(alfa_*h_fc(Tt4)*1000);
 SpecificFuelConsumption = (alfa_/SpecificThrust)*100000;
 
 
