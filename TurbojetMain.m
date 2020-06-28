@@ -19,10 +19,12 @@ R = 287.15; % Gas cte in J/kgK
 hf0 = 4.3095e7; % Fuel lower heating value J/kg
 
 %% Simulation
-[Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim_2(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
+[Tt, Pt, Ht, S_T, Eta_Overall, C_TS, Eta_Thermal, Eta_Propulsive] = Turbojet_Sim_2(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
 fprintf("Psi = " + S_T + "m/s\n");
 fprintf("C_t_s = " + 1000*C_TS + "g/kN*s\n");
 fprintf("Eta_o = " + 100*Eta_Overall + "%");
+fprintf("Eta_th = " + 100*Eta_Thermal + "%");
+fprintf("Eta_pr = " + 100*Eta_Propulsive + "%");
 
 figure()
 subplot(3, 1, 1)
@@ -46,14 +48,14 @@ grid on
 S_Tv = [];
 Eta_Overallv = [];
 C_TSv = [];
-M0v = [];
+Tt4v = [];
 
 n = 1;
-Tt4 = 1000;
-while (Tt4 <= 1800)
-    M0 = 0;
+M0 = 0;
+while (M0 <= 2)
+    Tt4 = 1000;
     i = 1;
-    while (M0 <= 2.55)
+    while (Tt4 <= 1900)
         [Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim_2(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
         S_Tv(n, i) = S_T;
         if (Eta_Overall < 0)
@@ -61,36 +63,36 @@ while (Tt4 <= 1800)
         end
         Eta_Overallv(n, i) = Eta_Overall;
         C_TSv(n, i) = C_TS;
-        M0v(i) = M0;
+        Tt4v(i) = Tt4;
         
         i= i +1;
-        M0 = M0 + 0.01;
+        Tt4 = Tt4 + 10;
     end
     n = n + 1;
-    Tt4 = Tt4 + 400;
+    M0 = M0 + 1;
 end
 
 figure()
 subplot(1,3,1)
-plot(M0v, S_Tv());
+plot(Tt4v, S_Tv());
 title('Specific Thrust');
-xlabel('Mach');
+xlabel('T_t_4 [K]');
 ylabel('Psi [m/s]');
-legend('T_t_4 = 1000 K', 'T_t_4 = 1400 K', 'T_t_4 = 1800 K');
+legend('M_0 = 0', 'M_0 = 1', 'M_0 = 2');
 grid on;
 
 subplot(1,3,2)
-plot(M0v, 100*Eta_Overallv)
+plot(Tt4v, 100*Eta_Overallv)
 title('Overall Efficiency');
-xlabel('Mach');
+xlabel('T_t_4 [K]');
 ylabel('Eta_o [%]');
-legend('T_t_4 = 1000 K', 'T_t_4 = 1400 K', 'T_t_4 = 1800 K');
+legend('M_0 = 0', 'M_0 = 1', 'M_0 = 2');
 grid on;
 
 subplot(1,3,3)
-plot(M0v, 1000*C_TSv)
+plot(Tt4v, 1000*C_TSv)
 title('Thrust Specific Fuel Consumption');
-xlabel('Mach');
+xlabel('T_t_4 [K]');
 ylabel('C_t_s [g/kN*s]');
-legend('T_t_4 = 1000 K', 'T_t_4 = 1400 K', 'T_t_4 = 1800 K');
+legend('M_0 = 0.5', 'M_0 = 1.5', 'M_0 = 2.5');
 grid on;

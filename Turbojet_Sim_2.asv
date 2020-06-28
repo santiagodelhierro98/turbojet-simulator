@@ -93,19 +93,19 @@ phi_t9 = phi_t5; % bc T9=T5
 phi9i = phi_t9 - log(pi_9);
 
 function F = T9_(x)
-F(1) = (((3.5*log(x) - 2.8e-5*(x) + 1.12e-8*(x^2) + (3090/(x*(exp(3090/x) - 1))) - log((exp(3090/x) - 1)/exp(3090/x))) + alpha*(4.47659*log(x) + 8.01994e-3*x + 9.19648e-7*(x^2)))/(1+alpha))/(1 + alpha) - phi9i;
+F(1) = (((3.5*log(x) - 2.8e-5*(x) + 1.12e-8*(x^2) + (3090/(x*(exp(3090/x) - 1))) - log((exp(3090/x) - 1)/exp(3090/x))) + alpha*(4.47659*log(x) + 8.01994e-3*x + 9.19648e-7*(x^2)))/(1+alpha)) - phi9i;
 end
 
 x0 = Tt9;
 T9_is = fsolve(@T9_, x0);
 h9air_is = h_air(T9_is);
 h9fuel_is = h_fuel(T9_is);
-h9_is = R*((h9air_is/R) + alpha*(h9fuel_is/R))/(1 + alpha);
+h9_is = ((h9air_is/R) + alpha*(h9fuel_is/R))/(1 + alpha);
 
 Cp_n = (cp_air(Tt9) + alpha*(cp_fuel(Tt9)))/(1+alpha);
 V9 = fi*sqrt(2*(ht9 - h9_is));
 
-v9 = V9/sqrt(2*Cp_n*T0);
+v9 = V9/sqrt(2*cp_n*T0);
 V0 = M0*sqrt(gamma*R*T0);
 v0 = V0/sqrt(2*Cp_air*T0);
 
