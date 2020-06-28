@@ -1,6 +1,8 @@
 %% Turbojet Simulator
 clear all;
 close all;
+clc;
+clear;
 
 %% Inputs
 M0 = 2; % Mach 0
@@ -17,7 +19,7 @@ R = 287.15; % Gas cte in J/kgK
 hf0 = 4.3095e7; % Fuel lower heating value J/kg
 
 %% Simulation
-[Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
+[Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim_2(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
 fprintf("Psi = " + S_T + "m/s\n");
 fprintf("C_t_s = " + 1000*C_TS + "g/kN*s\n");
 fprintf("Eta_o = " + 100*Eta_Overall + "%");
@@ -52,7 +54,7 @@ while (Tt4 <= 1800)
     M0 = 0;
     i = 1;
     while (M0 <= 2.55)
-        [Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
+        [Tt, Pt, Ht, S_T, Eta_Overall, C_TS] = Turbojet_Sim_2(M0, T0, P0, Tt4, TauC, epsilon_i, epsilon_b, epsilon_n, eta_cp, eta_tp, fi, x, R, hf0);
         S_Tv(n, i) = S_T;
         if (Eta_Overall < 0)
             Eta_Overall = 0;
