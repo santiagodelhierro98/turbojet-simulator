@@ -112,7 +112,7 @@ v0 = V0/sqrt(2*Cp_air*T0);
 S_T = (1 + alpha_)*V9 - V0;
 Eta_Overall = S_T*V0/(alpha_*h_fc(Tt4)*1000);
 C_TS = (alpha_/S_T)*1e5; %% g/kN*s
-Eta_Propulsive = 2*v0/(v9+v0);
+Eta_Propulsive = 2*(v9 - v0)*v0/(v9^2 - v0^2);
 Eta_Thermal = (V9^2 - V0^2)/(2*alpha_*hf0);
 
 end

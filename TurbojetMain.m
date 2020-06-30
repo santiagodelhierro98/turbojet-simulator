@@ -52,7 +52,7 @@ Tt4v = [];
 
 n = 1;
 M0 = 0;
-while (M0 <= 2)
+while (M0 <= 2.5)
     Tt4 = 1000;
     i = 1;
     while (Tt4 <= 1900)
@@ -69,7 +69,7 @@ while (M0 <= 2)
         Tt4 = Tt4 + 10;
     end
     n = n + 1;
-    M0 = M0 + 1;
+    M0 = M0 + 0.5;
 end
 
 figure()
@@ -78,7 +78,7 @@ plot(Tt4v, S_Tv());
 title('Specific Thrust');
 xlabel('T_t_4 [K]');
 ylabel('Psi [m/s]');
-legend('M_0 = 0', 'M_0 = 1', 'M_0 = 2');
+legend('M_0 = 0', 'M_0 = 0.5', 'M_0 = 1', 'M_0 = 1.5', 'M_0 = 2','M_0 = 2.5');
 grid on;
 
 subplot(1,3,2)
@@ -86,7 +86,7 @@ plot(Tt4v, 100*Eta_Overallv)
 title('Overall Efficiency');
 xlabel('T_t_4 [K]');
 ylabel('Eta_o [%]');
-legend('M_0 = 0', 'M_0 = 1', 'M_0 = 2');
+legend('M_0 = 0', 'M_0 = 0.5', 'M_0 = 1', 'M_0 = 1.5', 'M_0 = 2','M_0 = 2.5');
 grid on;
 
 subplot(1,3,3)
@@ -94,5 +94,5 @@ plot(Tt4v, 1000*C_TSv)
 title('Thrust Specific Fuel Consumption');
 xlabel('T_t_4 [K]');
 ylabel('C_t_s [g/kN*s]');
-legend('M_0 = 0.5', 'M_0 = 1.5', 'M_0 = 2.5');
+legend('M_0 = 0', 'M_0 = 0.5', 'M_0 = 1', 'M_0 = 1.5', 'M_0 = 2','M_0 = 2.5');
 grid on;
